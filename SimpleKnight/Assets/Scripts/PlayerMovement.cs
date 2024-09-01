@@ -10,22 +10,32 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask groundLayer;
 
     private float horizontal;
+    private float vertical;
     public float speed = 15f;
     public float jumpingPower = 16f;
-    private bool isFacingRight = true;
+    public bool isFacingRight = true;
+    public float fastFallMultiplier = 2f;
 
 
     private void Update()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-
-        if(isFacingRight && horizontal >0f)
+        if(isFacingRight && horizontal < 0f)
         {
             Flip();
         }
-        else if(isFacingRight && horizontal < 0f)
+        else if(!isFacingRight && horizontal > 0f)
         {
             Flip();
+        }
+    }
+    private void FixedUpdate()
+    {
+        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+        
+        // Handle fast falling
+        if (vertical < 0f && !IsGrounded() && rb.velocity.y <= 0f) // Only fast fall if pressing down, not grounded, and falling
+        {
+            rb.velocity += Vector2.up * Physics2D.gravity.y * (fastFallMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
 
@@ -57,7 +67,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void Move(InputAction.CallbackContext context)
     {
-        horizontal = context.ReadValue<Vector2>().x;
+        Vector2 input = context.ReadValue<Vector2>();
+        horizontal = input.x;
+        vertical = input.y;
     }
 
 }
