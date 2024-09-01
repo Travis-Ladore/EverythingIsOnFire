@@ -27,8 +27,12 @@ public class BasicEnemy : MonoBehaviour
     {
         if (playerTransform != null)
         {
+            // Calculate direction towards the player (horizontal only)
             Vector2 direction = (playerTransform.position - transform.position).normalized;
-            rb.velocity = direction * speed;
+            Vector2 horizontalMovement = new Vector2(direction.x, 0); // Only move horizontally
+
+            // Apply horizontal movement
+            rb.velocity = new Vector2(horizontalMovement.x * speed, rb.velocity.y);
         }
     }
 
