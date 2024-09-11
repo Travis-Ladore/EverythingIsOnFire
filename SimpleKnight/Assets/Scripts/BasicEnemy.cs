@@ -2,18 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicEnemy : MonoBehaviour
+public class BasicEnemy : EnemyBase
 {
     public float speed = 5f; // Speed at which the enemy moves towards the player
-    public int maxHealth = 3; // Maximum health of the enemy
-    private int currentHealth;
-
     private Transform playerTransform;
     private Rigidbody2D rb;
 
-    private void Start()
+    protected override void Start()
     {
-        currentHealth = maxHealth;
+        base.Start();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform; // Assumes player has the tag "Player"
         rb = GetComponent<Rigidbody2D>(); // Get the Rigidbody2D component
     }
@@ -27,34 +24,8 @@ public class BasicEnemy : MonoBehaviour
     {
         if (playerTransform != null)
         {
-            // Calculate direction towards the player (horizontal only)
             Vector2 direction = (playerTransform.position - transform.position).normalized;
-            Vector2 horizontalMovement = new Vector2(direction.x, 0); // Only move horizontally
-
-            // Apply horizontal movement
-            rb.velocity = new Vector2(horizontalMovement.x * speed, rb.velocity.y);
+            rb.velocity = new Vector2(direction.x * speed, rb.velocity.y);
         }
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        // You could add a death animation or effect here
-        Destroy(gameObject); // Destroy the enemy GameObject
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // Optionally handle collision responses if needed
-        // Example: Check collision with walls or other enemies
     }
 }

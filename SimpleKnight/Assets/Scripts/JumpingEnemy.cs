@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JumpingEnemy : MonoBehaviour
+public class JumpingEnemy : EnemyBase
 {
     public float speed = 2f; // Speed at which the enemy moves horizontally towards the player
     public float jumpForce = 10f; // Force of the jump towards the player
-    public int maxHealth = 3; // Maximum health of the enemy
     public float jumpDistance = 3f; // Distance from the player within which the enemy will jump
 
-    private int currentHealth;
     private Transform playerTransform;
     private Rigidbody2D rb;
     private bool isGrounded;
@@ -17,9 +15,9 @@ public class JumpingEnemy : MonoBehaviour
     public Transform groundCheck; // Transform used to check if the enemy is grounded
     public LayerMask groundLayer; // Layer mask for the ground
 
-    private void Start()
+    protected override void Start()
     {
-        currentHealth = maxHealth;
+        base.Start();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform; // Assumes player has the tag "Player"
         rb = GetComponent<Rigidbody2D>(); // Get the Rigidbody2D component
     }
@@ -61,20 +59,5 @@ public class JumpingEnemy : MonoBehaviour
     {
         // Check if the enemy is grounded using a small circle at the ground check position
         isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.1f, groundLayer);
-    }
-
-    public void TakeDamage(int damage)
-    {
-        currentHealth -= damage;
-
-        if (currentHealth <= 0)
-        {
-            Die();
-        }
-    }
-
-    private void Die()
-    {
-        Destroy(gameObject); // Destroy the enemy GameObject
     }
 }

@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
     public float jumpingPower = 16f;
     public bool isFacingRight = true;
     public float fastFallMultiplier = 2f;
+    public int coinCount = 0;
 
 
     private void Update()
@@ -70,6 +71,12 @@ public class PlayerMovement : MonoBehaviour
         Vector2 input = context.ReadValue<Vector2>();
         horizontal = input.x;
         vertical = input.y;
+    }
+
+    public void AddCoins(int amount)
+    {
+        coinCount += amount;
+        Debug.Log("Coins Added: " + amount + ", Total Coins: " + coinCount);
     }
 
 }

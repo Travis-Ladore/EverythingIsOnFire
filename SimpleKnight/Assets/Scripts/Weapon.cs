@@ -8,13 +8,12 @@ public class Weapon : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy")) // Assumes enemies have the tag "Enemy"
+        // Check if the collided object has an EnemyBase component (either standard enemy or jumping enemy)
+        EnemyBase enemy = collision.GetComponent<EnemyBase>();
+        if (enemy != null)
         {
-            BasicEnemy enemy = collision.GetComponent<BasicEnemy>();
-            if (enemy != null)
-            {
-                enemy.TakeDamage(damage); // Apply damage to the enemy
-            }
+            enemy.TakeDamage(damage); // Apply damage to the enemy
         }
     }
+
 }
